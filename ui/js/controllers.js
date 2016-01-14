@@ -49,13 +49,21 @@ function($scope, appconf, menu, serverconf, scaMessage, toaster, jwtHelper, $htt
         progress: { active: false },
         config: { active: false },
     }
+    function set_active_tab(name) {
+        for(var k in $scope.tabs) {
+            $scope.tabs[k].active = false;
+        }
+        $scope.tabs[name].active = true;
+    }
 
     load_task().then(function() {
         if($scope.task.status != "finished") {         
-            $scope.tabs.progress.active = true;
+            //$scope.tabs.progress.active = true;
+            set_active_tab("progress");
             load_progress();
         } else {
-            $scope.tabs.products.active = true;
+            //$scope.tabs.products.active = true;
+            set_active_tab("products");
         }
     });
 
@@ -105,6 +113,7 @@ function($scope, appconf, menu, serverconf, scaMessage, toaster, jwtHelper, $htt
             if($scope.progress.status != "finished") $timeout(load_progress, timeout);
             else {
                 toaster.success("Task completed successfully"); //can I assume it's successful?
+                set_active_tab("products");
                 load_task();
             }
         }, function(res) {

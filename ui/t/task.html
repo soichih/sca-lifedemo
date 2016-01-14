@@ -22,7 +22,7 @@
                 <!--ETA : <time>TODO</time>-->
             </div>
 
-            <span class="text-muted">Requested:</span> <time>{{progress.update_time|date:'medium'}}</time>
+            <span class="text-muted">Requested at:</span> <time>{{progress.update_time|date:'medium'}}</time>
         </tab>
         <tab heading="Configuration" active="tabs.config.active">
             <br>
@@ -30,7 +30,9 @@
         </tab>
         <tab heading="Debug" class="pull-right">
             <br>
+            <h3>Task</h3>
             <pre>{{task|json}}</pre>
+            <h3>Progress</h3>
             <pre>{{progress|json}}</pre>
         </tab>
         <!--

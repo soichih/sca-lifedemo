@@ -3,27 +3,38 @@
     <div class="row">
         <div class="col-md-10">
             <h1>Life Demo</h1>
+            <p>This UI allows you to runs Franco Pestilli's <a href="francopestilli.github.io/life/">Linear Fascicle Evaluation (LiFE)</a> Matlab application on Karst.</p>
+            <p>Select an input data file (right now, there is only 1 listed) and click Submit button to run the application. Once the Job is completed (takes about 30 minutes) you will see the data products (PNG images) displayed.</p>
+            <p>You can see <a href="https://soichi7.ppa.iu.edu/life/#/task/5697f679a48adac219d192a2">here</a> for sample output.</p>
 
-            <form ng-submit="submit()">
-                <label>Input Data</label>
-                <ui-select ng-model="config.input" ui-select-required>
-                    <ui-select-match placeholder="Please select data to process...">
-                        <b>{{$select.selected.name}}</b> <small class="muted">({{$select.selected.url}})</small>
-                    </ui-select-match>
-                    <ui-select-choices repeat="data in datas">
-                        <b>{{data.name}}</b> <small class="muted">({{data.url}})</small><br>
-                        {{data.desc}}
-                    </ui-select-choices>
-                </ui-select>
+            <hr>
+            <form ng-submit="submit()" class="form-horizontal">
                 <div class="form-group">
-                    <label>Some Config</label>
-                    <input type="text" ng-model="config.something" class="form-control"></input>
+                    <label class="col-sm-2 control-label">Input Data</label>
+                    <div class="col-sm-10">
+                        <ui-select ng-model="config.input" ui-select-required>
+                            <ui-select-match placeholder="Please select data to process...">
+                                <b>{{$select.selected.name}}</b> <small class="muted">({{$select.selected.url}})</small>
+                            </ui-select-match>
+                            <ui-select-choices repeat="data in datas">
+                                <b>{{data.name}}</b> <small class="muted">({{data.url}})</small><br>
+                                {{data.desc}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
                 </div>
-
-                <button type="submit" class="btn slide-down" ng-show="config.input != null && !task">Submit</button>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Some Config</label>
+                    <div class="col-sm-10">
+                        <input type="text" ng-model="config.something" class="form-control"></input>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn slide-down" ng-disabled="config.input == null">Submit</button>
+                    </div>
+                </div>
             </form>
-
-            <sca-task task="task" ng-if="task"></sca-task>
         </div>
         <div class="col-md-2">
             <!--buffer-->
