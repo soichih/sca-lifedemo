@@ -1,0 +1,34 @@
+<!--<sca-menutab menu="appconf.menu" active="'about'" user="user"></sca-menutab>-->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-10">
+            <h1>Life Demo</h1>
+
+            <form ng-submit="submit()">
+                <label>Input Data</label>
+                <ui-select ng-model="config.input" ui-select-required>
+                    <ui-select-match placeholder="Please select data to process...">
+                        <b>{{$select.selected.name}}</b> <small class="muted">({{$select.selected.url}})</small>
+                    </ui-select-match>
+                    <ui-select-choices repeat="data in datas">
+                        <b>{{data.name}}</b> <small class="muted">({{data.url}})</small><br>
+                        {{data.desc}}
+                    </ui-select-choices>
+                </ui-select>
+                <div class="form-group">
+                    <label>Some Config</label>
+                    <input type="text" ng-model="config.something" class="form-control"></input>
+                </div>
+
+                <button type="submit" class="btn slide-down" ng-show="config.input != null && !task">Submit</button>
+            </form>
+
+            <sca-task task="task" ng-if="task"></sca-task>
+        </div>
+        <div class="col-md-2">
+            <!--buffer-->
+        </div>
+    </div>
+</div>
+
+
