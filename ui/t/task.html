@@ -4,18 +4,17 @@
         <tab heading="Products" ng-show="task.status == 'finished'" active="tabs.products.active">
             <br>
             <div ng-repeat="product in task.products">
-                <ul class="list-group">
-                    <li class="list-group-item" ng-repeat="file in product.files">
-                        <h3>{{file.name}}</h3>
-                        <img style="max-width: 50%" ng-src="https://soichi7.ppa.iu.edu/api/life/demo/raw?t={{task_id}}&p={{$parent.$index}}&f={{$index}}&at={{jwt}}"></img>
-                        <p class="help-block">{{file.desc}}</p>
-                    </li>
-                </ul>
+                <accordion close-others="true">
+                    <accordion-group ng-repeat="file in product.files" heading="{{file.name}}">
+                        <img style="max-height: 500px" ng-src="{{file.url}}">
+                        <p>{{file.desc}}</p>
+                    </accordion-group>
+                </accordion>
             </div>
         </tab>
         <tab heading="Progress" ng-show="progress" active="tabs.progress.active">
             <a target="{{task._id}}" href="{{appconf.progress_url}}/#/detail/{{progress.key}}" class="pull-right">Show Progress Detail</a>
-            <h3 style="text-transform: uppercase;">{{progress.status}} <i class="fa fa-spinner fa-spin"></i></h3>
+            <h3 style="text-transform: uppercase;">{{progress.status}} <i class="fa fa-spinner fa-spin" ng-if="progress.status == 'running'"></i></h3>
             <p>{{progress.msg}}</p>
             <div ng-if="progress.status == 'running'">
                 <progressbar value="progress.progress*100" type="{{progressType(progress.status)}}">{{progress.progress*100 | number:1}}%</progressbar>

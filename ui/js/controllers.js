@@ -41,7 +41,6 @@ function($scope, appconf, menu, serverconf, scaMessage, toaster, jwtHelper, $htt
     $scope.appconf = appconf;
     $scope.task_id = $routeParams.id;
 
-    $scope.jwt = localStorage.getItem(appconf.jwt_id);
     
     //keep up with which tabs are active
     $scope.tabs = {
@@ -56,7 +55,7 @@ function($scope, appconf, menu, serverconf, scaMessage, toaster, jwtHelper, $htt
         $scope.tabs[name].active = true;
     }
 
-    load_task().then(function() {
+    load_task().then(function(task) {
         if($scope.task.status != "finished") {         
             //$scope.tabs.progress.active = true;
             set_active_tab("progress");
@@ -72,6 +71,21 @@ function($scope, appconf, menu, serverconf, scaMessage, toaster, jwtHelper, $htt
         return $http.get(appconf.api+"/demo/task/"+$scope.task_id)
         .then(function(res) {
             $scope.task = res.data;
+
+            if($scope.task.products) {
+                var jwt = localStorage.getItem(appconf.jwt_id);
+                var pid = 0;
+                $scope.task.products.forEach(function(product) {
+                    var fid = 0;
+                    product.files.forEach(function(file) {
+                        file.url = "https://soichi7.ppa.iu.edu/api/life/demo/raw?t="+$scope.task._id+"&p="+pid+"&f="+fid+"&at="+jwt;
+                        fid++;
+                    });
+                    pid++;
+                });
+            }
+
+            return res.data;
         }, function(res) {
             if(res.data && res.data.message) toaster.error(res.data.message);
             else toaster.error(res.statusText);
