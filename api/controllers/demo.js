@@ -18,10 +18,10 @@ router.post('/submit', jwt({secret: config.life.jwt.pub}), function(req, res, ne
         body: {
             workflow_id: "569560ec961f025847282970",
             step_idx: 0,
-            resources: {compute: "5697b3d427863e2273414bed"},
+            resources: req.body.resources,
             service_id: "lifedemo",
             name: "life demo submission by sub:"+req.user.sub,
-            config: req.body
+            config: req.body.config
         },
         headers: { 'Authorization': 'Bearer '+config.sca.jwt }
     }, function (err, resp, body) {

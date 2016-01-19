@@ -14,15 +14,27 @@ function($scope, appconf, menu, serverconf, scaMessage, toaster, jwtHelper, $htt
     scaMessage.show(toaster);
     $scope.appconf = appconf;
 
-    $scope.config = { input: null, something: "demo" };
+    //TODO - will use sca UI's resource query interface (or should I have that served via API?)
+    $scope.allresources = [
+        {name: "Karst", desc: "IU's main HTC cluster [ppn=16]", resource_id: "5697b3d427863e2273414bed"},
+        {name: "BigRed II", desc: "IU's HPC supercomputer [ppn=32]", resource_id: "569d611670a0f97550661e0c"},
+        //{name: "Jetstream VM", desc: "A jetstream VM allocated for this prototype", resource_id: "569d5ff770a0f97550661e0b"},
+    ];
+    $scope.resources = {compute: $scope.allresources[0]};
 
     $scope.datas = [ 
         {name: "LiFE Demo Data (IU)", desc: "Copy of Demo data provided by Franco Pestilli (cached at xd-login for faster download)", url: "http://xd-login.opensciencegrid.org/scratch/hayashis/life/life_demo_data.tar.gz"},
         {name: "LiFE Demo Data (Stanford)", desc: "Demo data provided by Franco Pestilli", url: "https://stacks.stanford.edu/file/druid:cs392kv3054/life_demo_data.tar.gz"},
     ];
+    $scope.config = { input: $scope.datas[0], paramx: "123", paramy: "345", paramz: "abc"};
 
     $scope.submit = function() {
-        $http.post(appconf.api+"/demo/submit", $scope.config)
+        $http.post(appconf.api+"/demo/submit", {
+            resources: {
+                compute: $scope.resources.compute.resource_id,
+            },
+            config: $scope.config
+        })
         .then(function(res) {
             toaster.success(res.data.message);
             //$scope.task = res.data.task;
