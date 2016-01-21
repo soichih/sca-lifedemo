@@ -16,9 +16,9 @@ function($scope, appconf, menu, serverconf, scaMessage, toaster, jwtHelper, $htt
 
     //TODO - will use sca UI's resource query interface (or should I have that served via API?)
     $scope.allresources = [
-        {name: "Karst", desc: "IU's main HTC cluster [ppn=16]", resource_id: "5697b3d427863e2273414bed"},
-        {name: "BigRed II", desc: "IU's HPC supercomputer [ppn=32]", resource_id: "569d611670a0f97550661e0c"},
-        //{name: "Jetstream VM", desc: "A jetstream VM allocated for this prototype", resource_id: "569d5ff770a0f97550661e0b"},
+        {name: "Karst", desc: "IU's main HTC cluster [ppn=16]", resource_id: "56a0431dcb0548a94d5471e1"},
+        {name: "BigRed II", desc: "IU's HPC supercomputer [ppn=32]", resource_id: "56a042f6cb0548a94d5471e0"},
+        //{name: "Jetstream VM", desc: "A jetstream VM allocated for this prototype", resource_id: ".................."},
     ];
     $scope.resources = {compute: $scope.allresources[0]};
 
