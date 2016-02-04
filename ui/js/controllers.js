@@ -96,7 +96,7 @@ function($scope, appconf, menu, serverconf, scaMessage, toaster, jwtHelper, $htt
                 $scope.task.products.forEach(function(product) {
                     var fid = 0;
                     product.files.forEach(function(file) {
-                        file.url = "https://soichi7.ppa.iu.edu/api/life/demo/raw?t="+$scope.task._id+"&p="+pid+"&f="+fid+"&at="+jwt;
+                        file.url = "/api/life/demo/raw?t="+$scope.task._id+"&p="+pid+"&f="+fid+"&at="+jwt;
                         fid++;
                     });
                     pid++;
@@ -129,6 +129,10 @@ function($scope, appconf, menu, serverconf, scaMessage, toaster, jwtHelper, $htt
     function load_progress() {
         $http.get(appconf.progress_api+"/status/"+$scope.task.progress_key)
         .then(function(res) {
+            if(!res.data) {
+                console.log("failed to load progress information");
+                return;
+            }
             /*
             //load products if status becomes running to finished
             if(scope.progress && scope.progress.status == "running" && res.data.status == "finished") {
