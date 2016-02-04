@@ -54,17 +54,17 @@ app.config(['$routeProvider', 'appconf', function($routeProvider, appconf) {
     when('/submit', {
         templateUrl: 't/submit.html',
         controller: 'SubmitController',
-        requiresLogin: true
+        //requiresLogin: true
     })
     .when('/tasks', {
         templateUrl: 't/tasks.html',
         controller: 'TasksController',
-        requiresLogin: true
+        //requiresLogin: true
     })
     .when('/task/:id', {
         templateUrl: 't/task.html',
         controller: 'TaskController',
-        requiresLogin: true
+        //requiresLogin: true
     })
     /*
     .when('/resetpass', {
