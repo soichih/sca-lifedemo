@@ -22,6 +22,7 @@ router.get('/config', jwt({secret: config.life.jwt.pub, credentialsRequired: fal
         defaults: config.meshconfig.defaults,
         //menu: get_menu(req.user),
         */
+        resources: config.life.resources,
     };
     res.json(conf);
 });

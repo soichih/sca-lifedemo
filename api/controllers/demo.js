@@ -16,7 +16,7 @@ router.post('/submit', jwt({secret: config.life.jwt.pub}), function(req, res, ne
         url: config.sca.api+"/task",
         json: true,
         body: {
-            workflow_id: "569560ec961f025847282970",
+            workflow_id: config.life.workflow_id,
             step_idx: 0,
             resources: req.body.resources,
             service_id: "lifedemo",

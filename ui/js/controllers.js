@@ -14,13 +14,19 @@ function($scope, appconf, menu, serverconf, scaMessage, toaster, jwtHelper, $htt
     scaMessage.show(toaster);
     $scope.appconf = appconf;
 
+    /*
     //TODO - will use sca UI's resource query interface (or should I have that served via API?)
     $scope.allresources = [
         {name: "Karst", desc: "IU's main HTC cluster [ppn=16]", resource_id: "56a0431dcb0548a94d5471e1"},
         {name: "BigRed II", desc: "IU's HPC supercomputer [ppn=32]", resource_id: "56a042f6cb0548a94d5471e0"},
         //{name: "Jetstream VM", desc: "A jetstream VM allocated for this prototype", resource_id: ".................."},
     ];
-    $scope.resources = {compute: $scope.allresources[0]};
+    */
+    serverconf.then(function(_c) { 
+        $scope.serverconf = _c; 
+        $scope.allresources = _c.resources;
+        $scope.resources = {compute: $scope.allresources[0]}; //select first one
+    });
 
     $scope.datas = [ 
         {name: "LiFE Demo Data (IU)", desc: "Copy of Demo data provided by Franco Pestilli (cached at xd-login for faster download)", url: "http://xd-login.opensciencegrid.org/scratch/hayashis/life/life_demo_data.tar.gz"},
