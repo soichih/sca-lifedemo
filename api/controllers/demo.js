@@ -30,6 +30,19 @@ router.post('/submit', jwt({secret: config.life.jwt.pub}), function(req, res, ne
     });
 });
 
+//return all recent tasks
+router.get('/task/recent', jwt({secret: config.life.jwt.pub}), function(req, res, next) {
+    request.get({
+        url: config.sca.api+"/task/recent",
+        json: true,
+        headers: { 'Authorization': 'Bearer '+config.sca.jwt }
+    }, function (err, resp, task) {
+        if(err) return next(err);
+        res.json(task);
+    });
+});
+
+
 //just a plain proxy for /task/:id as lifedemo user
 router.get('/task/:id', jwt({secret: config.life.jwt.pub}), function(req, res, next) {
     var task_id = req.params.id;

@@ -16,6 +16,7 @@
     "express-jwt": "^3.3.0",
     "express-winston": "^1.2.0",
     "request": "^2.67.0",
+    "underscore": "^1.8.3",
     "winston": "^2.1.1"
   }
 }

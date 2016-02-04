@@ -28,23 +28,14 @@ angular.module('app.config', [])
 
     menu: [
         {
-            id: "about",
-            label: "About",
-            url: "#/about",
+            id: "submit",
+            label: "Submit",
+            url: "#/submit",
         },
         {
-            id: "workflows",
-            label: "Workflows",
-            url: "#/workflows",
-            show: function(scope) {
-                if(~scope.sca.indexOf('user')) return true;
-                return false;
-            }
-        },
-        {
-            id: "resources",
-            label: "Resources",
-            url: "#/resources",
+            id: "tasks",
+            label: "Jobs",
+            url: "#/tasks",
             show: function(scope) {
                 if(~scope.sca.indexOf('user')) return true;
                 return false;

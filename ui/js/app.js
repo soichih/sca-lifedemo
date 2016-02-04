@@ -56,6 +56,11 @@ app.config(['$routeProvider', 'appconf', function($routeProvider, appconf) {
         controller: 'SubmitController',
         requiresLogin: true
     })
+    .when('/tasks', {
+        templateUrl: 't/tasks.html',
+        controller: 'TasksController',
+        requiresLogin: true
+    })
     .when('/task/:id', {
         templateUrl: 't/task.html',
         controller: 'TaskController',

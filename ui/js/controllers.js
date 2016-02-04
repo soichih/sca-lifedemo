@@ -149,3 +149,17 @@ function($scope, appconf, menu, serverconf, scaMessage, toaster, jwtHelper, $htt
     }
 }]);
 
+app.controller('TasksController', 
+['$scope', 'appconf', 'menu', 'serverconf', 'scaMessage', 'toaster', 'jwtHelper', '$http', '$location', '$routeParams', '$timeout',
+function($scope, appconf, menu, serverconf, scaMessage, toaster, jwtHelper, $http, $location, $routeParams, $timeout) {
+    scaMessage.show(toaster);
+    $scope.appconf = appconf;
+
+    $http.get(appconf.api+"/demo/task/recent")
+    .then(function(res) {
+        $scope.tasks = res.data;
+    }, function(res) {
+        if(res.data && res.data.message) toaster.error(res.data.message);
+        else toaster.error(res.statusText);
+    });
+}]);
