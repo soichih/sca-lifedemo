@@ -129,10 +129,12 @@ function($scope, appconf, menu, serverconf, scaMessage, toaster, jwtHelper, $htt
     function load_progress() {
         $http.get(appconf.progress_api+"/status/"+$scope.task.progress_key)
         .then(function(res) {
+            /*
             if(!res.data) {
                 console.log("failed to load progress information");
-                return;
+                $timeout(load_progress, 200);
             }
+            */
             /*
             //load products if status becomes running to finished
             if(scope.progress && scope.progress.status == "running" && res.data.status == "finished") {

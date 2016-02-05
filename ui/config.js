@@ -3,7 +3,7 @@
 angular.module('app.config', [])
 .constant('appconf', {
 
-    title: 'Life Demo',
+    title: 'Life Demo (soichi7)',
     api: '../api/life',
 
     //shared servive api and ui urls (for menus and stuff)
@@ -25,6 +25,8 @@ angular.module('app.config', [])
     auth_url: '../auth',
 
     jwt_id: 'jwt',
+
+    sample_task: '56a04390cb0548a94d5471e2', 
 
     menu: [
         {
