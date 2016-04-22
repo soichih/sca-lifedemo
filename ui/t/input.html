@@ -1,0 +1,61 @@
+<!--<sca-menutab menu="appconf.menu" active="'recon'" user="user"></sca-menutab>-->
+<sca-breadcrumb breads="appconf.breads" active="'input'"></sca-breadcrumb>
+<div class="container">
+    <h3>Add Input</h3>
+    <div class="page">
+        <div class="form-group">
+            <tabset>
+                <tab index="0" heading="Upload">
+                    <br>
+                    <p>Please upload .tar.gz files you'd like to process</p>
+                    <sca-wf-uploader instid="instance._id" taskid="appconf.upload_task_id" files="files"></sca-wf-uploader>
+                    <div class="pull-right">
+                        <button type="button" class="btn" ng-click="back()">Back</button>
+                        <button type="button" class="btn btn-primary" ng-click="doneupload(files)" ng-if="files.length > 0">Next</button>
+                    </div>
+                </tab>
+                <tab index="1" heading="From URL">
+                    <br>
+                    <form ng-submit="fromurl(url)">
+                        <div class="form-group">
+                            <label for="subject">URL</label>
+                            <input type="text" class="form-control" ng-model="url" placeholder="http://somewhere.com/somepath/some.nifti" required>
+                        </div>
+                        <p>You can use following URLs to test</p>
+                        <ul ng-repeat="sample in appconf.sample_urls"> 
+                            <li>
+                                    <b>{{sample.name}}</b>
+                                    <p>{{sample.desc}}</p>
+                                    <a href="javascript:void(0);" ng-click="$parent.url = sample.url">{{sample.url}}</a>
+                            </li>
+                        </ul>
+                        <div class="pull-right">
+                            <button type="button" class="btn" ng-click="back()">Back</button>
+                            <button type="submit" class="btn btn-primary" ng-disabled="!url">Next</button>
+                        </div>
+                    </form>
+                </tab>
+                <tab index="2" heading="From SDA">
+                    <br>
+                    <form ng-submit="fromsda(path)">
+                        <div class="form-group">
+                            <label for="subject">SDA Path</label>
+                            <input type="text" class="form-control" ng-model="path" placeholder="/hpss/h/a/hayashis/isos/archlinux-2014.08.01-dual.iso" required>
+                        </div>
+                        <div class="pull-right">
+                            <button type="button" class="btn" ng-click="back()">Back</button>
+                            <button type="submit" class="btn btn-primary" ng-disabled="!path">Next</button>
+                        </div>
+                        <p>Sample paths...for soichi</p>
+                        <p>test/brain/life_demo_data_sda1.tar.gz</p>
+                        <p>test/brain/life_demo_data_sda2.tar.gz</p>
+                        <p>test/brain/life_demo_data_sda3.tar.gz</p>
+                    </form>
+                </tab>
+            </tabset>
+            <br clear="both">
+        </div>
+    </div>
+    <br>
+</div>
+

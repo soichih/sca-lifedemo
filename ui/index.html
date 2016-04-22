@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html ng-app="app" ng-controller="HeaderController as header">
+<html ng-app="app" ng-controller="PageController as page">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1, width=device-width">
-    <title>Life Demo</title>
+    <title>SCA Life Workflow</title>
 
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="bower_components/bootswatch/yeti/bootstrap.min.css">
@@ -15,7 +15,9 @@
     <link rel="stylesheet" href="bower_components/angular/angular-csp.css">
     <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.min.css">
 
-    <link rel="stylesheet" href="../shared/css/style.css">
+    <link rel="stylesheet" href="bower_components/sca-wf/ui/css/style.css">
+
+    <link rel="stylesheet" href="/shared/css/style.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -39,8 +41,15 @@
     <script src="bower_components/ng-file-upload/ng-file-upload.min.js"></script>
 
     <script src="config.js"></script>
-    <script src="../shared/config.js"></script> 
-    <script src="../shared/dist/shared.js"></script> 
+
+    <!-- TODO make this configurable? don't forget the shared/css/style.css -->
+    <script src="/shared/config.js"></script> 
+    <script src="/shared/dist/shared.js"></script> 
+
+    <script src="bower_components/sca-wf/ui/js/wf.js"></script>
+
+    <script src="bower_components/sca-product-raw/ui/raw.js"></script>
+    <script src="bower_components/sca-product-lifebrain/ui/lifebrain.js"></script>
 
     <script src="js/app.js"></script>
     <script src="js/controllers.js"></script>

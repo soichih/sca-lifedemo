@@ -1,12 +1,12 @@
 {
-  "name": "lifedemo",
+  "name": "sca-wf-lifedemo",
   "version": "1.0.0",
-  "description": "",
+  "description": "Executes Franco Pestilli's Linear Fascicle Evaluation (LiFE) application",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Soichi Hayashi <hayashis@iu.edu>",
   "license": "ISC",
   "dependencies": {
     "async": "^1.5.2",

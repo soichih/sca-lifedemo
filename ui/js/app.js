@@ -11,7 +11,10 @@ var app = angular.module('app', [
     'ui.bootstrap',
     'ui.select',
     'ui.bootstrap.tooltip',
+    'sca-wf',
     'sca-shared',
+    'sca-product-raw',
+    'sca-product-lifebrain',
 ]);
 
 //can't quite do the slidedown animation through pure angular/css.. borrowing slideDown from jQuery..
@@ -50,7 +53,46 @@ app.config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
 
 //configure route
 app.config(['$routeProvider', 'appconf', function($routeProvider, appconf) {
-    $routeProvider.
+    $routeProvider
+    .when('/start/:instid', {
+        template: '',
+        controller: 'StartController',
+        requireslogin: true
+    })
+    .when('/process/:instid', {
+        templateUrl: 't/process.html',
+        controller: 'ProcessController',
+        requireslogin: true
+    })
+    .when('/input/:instid', {
+        templateUrl: 't/input.html',
+        controller: 'InputController',
+        requireslogin: true
+    })
+    .when('/tasks/:instid', {
+        templateUrl: 't/tasks.html',
+        controller: 'TasksController',
+        requireslogin: true
+    })
+    .when('/import/:instid/:taskid', {
+        templateUrl: 't/import.html',
+        controller: 'ImportController',
+        requireslogin: true
+    })
+    .when('/task/:instid/:taskid', {
+        templateUrl: 't/task.html',
+        controller: 'TaskController',
+        requireslogin: true
+    })
+
+    /*
+    .when('/task/:instid/:taskid', {
+        templateUrl: 't/task.html',
+        controller: 'TaskController',
+        requireslogin: true
+    })
+    */
+    /*
     when('/submit', {
         templateUrl: 't/submit.html',
         controller: 'SubmitController',
@@ -66,24 +108,11 @@ app.config(['$routeProvider', 'appconf', function($routeProvider, appconf) {
         controller: 'TaskController',
         requiresLogin: true
     })
-    /*
-    .when('/resetpass', {
-        templateUrl: 't/resetpass.html',
-        controller: 'ResetpassController'
-    })
-    .when('/register', {
-        templateUrl: 't/register.html',
-        controller: 'RegisterController'
-    })
-    .when('/user', {
-        templateUrl: 't/user.html',
-        controller: 'UserController',
-        requiresLogin: true
-    })
-    */
     .otherwise({
         redirectTo: '/submit'
     });
+    */
+    ;
     
     //console.dir($routeProvider);
 }]).run(['$rootScope', '$location', 'toaster', 'jwtHelper', 'appconf', '$http', 'scaMessage',
@@ -138,17 +167,18 @@ function(appconf, $httpProvider, jwtInterceptorProvider) {
     $httpProvider.interceptors.push('jwtInterceptor');
 }]);
 
+/*
 app.factory('serverconf', ['appconf', '$http', function(appconf, $http) {
     return $http.get(appconf.api+'/config')
     .then(function(res) {
         return res.data;
     });
 }]);
+*/
 
 //load menu and profile by promise chaining
 app.factory('menu', ['appconf', '$http', 'jwtHelper', '$sce', 'scaMessage', 'scaMenu', 'toaster',
 function(appconf, $http, jwtHelper, $sce, scaMessage, scaMenu, toaster) {
-
     var jwt = localStorage.getItem(appconf.jwt_id);
     var menu = {
         header: {
@@ -160,19 +190,73 @@ function(appconf, $http, jwtHelper, $sce, scaMessage, scaMenu, toaster) {
         },
         top: scaMenu,
         user: null, //to-be-loaded
-        _profile: null, //to-be-loaded
+        //_profile: null, //to-be-loaded
     };
     if(appconf.icon_url) menu.header.icon = $sce.trustAsHtml("<img src=\""+appconf.icon_url+"\">");
     if(appconf.home_url) menu.header.url = appconf.home_url
+    /*
     if(jwt) menu.user = jwtHelper.decodeToken(jwt);
-
     if(menu.user) {
         $http.get(appconf.profile_api+'/public/'+menu.user.sub).then(function(res) {
             menu._profile = res.data;
         });
     }
+    */
+    var jwt = localStorage.getItem(appconf.jwt_id);
+    if(jwt) {
+        var expdate = jwtHelper.getTokenExpirationDate(jwt);
+        var ttl = expdate - Date.now();
+        if(ttl < 0) {
+            toaster.error("Your login session has expired. Please re-sign in");
+            localStorage.removeItem(appconf.jwt_id);
+        } else {
+            menu.user = jwtHelper.decodeToken(jwt);
+            if(ttl < 3600*1000) {
+                //jwt expring in less than an hour! refresh!
+                console.log("jwt expiring in an hour.. refreshing first");
+                $http({
+                    url: appconf.auth_api+'/refresh',
+                    //skipAuthorization: true,  //prevent infinite recursion
+                    //headers: {'Authorization': 'Bearer '+jwt},
+                    method: 'POST'
+                }).then(function(response) {
+                    var jwt = response.data.jwt;
+                    localStorage.setItem(appconf.jwt_id, jwt);
+                    menu.user = jwtHelper.decodeToken(jwt);
+                });
+            }
+        }
+    }
+
     return menu;
 }]);
+
+app.factory('instance', ['appconf', '$http', 'jwtHelper', 'toaster',
+function(appconf, $http, jwtHelper, toaster) {
+    var _instance = null; //call load()
+    return {
+        load: function(instid) {
+            return $http.get(appconf.sca_api+'/instance/'+instid)
+            .then(function(res) {
+                //console.log("loaded instance");
+                //console.dir(res.data);
+                _instance = res.data;
+                return res.data;
+            }, function(res) {
+                if(res.data && res.data.message) toaster.error(res.data.message);
+                else toaster.error(res.statusText);
+            });
+        },
+        save: function(instance) {
+            //console.dir(instance);
+            return $http.put(appconf.sca_api+'/instance/'+instance._id, instance);
+        },
+        get: function() {
+            return _instance;
+        }
+    }
+}]);
+
 
 //http://plnkr.co/edit/juqoNOt1z1Gb349XabQ2?p=preview
 /**

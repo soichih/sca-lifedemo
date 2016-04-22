@@ -1,17 +1,14 @@
-<sca-menutab menu="appconf.menu" active="'tasks'" user="user"></sca-menutab>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-10">
-            <h1>Past Tasks</h1>
-            <div ng-repeat="task in tasks | orderBy:'-create_date'">
-                <a href="#/task/{{task._id}}">{{task.name}}</a>
-                <p>Create Date: <time>{{task.create_date | date}}</time></p>
-                <pre>{{task|json}}</pre>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <!--buffer-->
-        </div>
+<!--<sca-menutab menu="appconf.menu" active="'submit'" user="user"></sca-menutab>-->
+<sca-breadcrumb breads="appconf.breads" active="'tasks'"></sca-breadcrumb>
+<div class="container">
+    <h3>Previously Submitted</h3>
+    <div class="page">
+        <p ng-if="tasks.length == 0" class="text-muted">No task has been submitted</p>
+        <ul class="list-group">
+            <li class="list-group-item slide-down clickable" ng-repeat="task in tasks | orderBy:'-update_date'" ng-click="open(task)">
+                <ng-include src="'t/oldtask.html'"></ng-include>
+            </li>
+        </ul>
     </div>
 </div>
 
