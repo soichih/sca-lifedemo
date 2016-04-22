@@ -61,7 +61,7 @@ function($scope, toaster, $http, jwtHelper, scaMessage, instance, $routeParams, 
     function do_import(download_task) {
         $http.post($scope.appconf.sca_api+"/task", {
             instance_id: $scope.instance._id,
-            service_id: "sca-product-lifebrain", //invoke product-nifti's importer
+            service_id: "sca-product-life", //invoke product-nifti's importer
             config: {
                 source_dir: download_task._id+"/download" //import source
             },
@@ -125,7 +125,7 @@ function($scope, toaster, $http, jwtHelper, scaMessage, instance, $routeParams, 
     $scope.doneupload = function() {
         $http.post($scope.appconf.sca_api+"/task", {
             instance_id: $scope.instance._id,
-            service_id: "sca-product-lifebrain", 
+            service_id: "sca-product-life", 
             config: {
                 source_dir: $scope.appconf.upload_task_id,
             }
@@ -308,10 +308,31 @@ function($scope, menu, scaMessage, toaster, jwtHelper, $http, $location, $routeP
 
     $scope.taskid = $routeParams.taskid;
     $scope.jwt = localStorage.getItem($scope.appconf.jwt_id);
+    $scope.activetab = 0; //raw
 
     $scope.back = function() {
         $location.path("/process/"+$routeParams.instid);
     }
+    
+    //receive task update from sca-wf-task-deps directive
+    $scope.$on("task_finished", function(event, task) {
+        console.log("received task finished");
+        $scope.task = task;
+        $scope.active = 1; //switch to life graphs tab
+    });
+
+    /*
+    $http.get($scope.appconf.sca_api+"/task/"+$routeParams.taskid)
+    .then(function(res) {
+        $scope.task = res.data;
+        if($scope.task.products && $scope.task.products[0].type == "life/out") {
+            $scope.activetab = 1;
+        }
+    }, function(res) {
+        if(res.data && res.data.message) toaster.error(res.data.message);
+        else toaster.error(res.statusText);
+    });
+    */
 
     /*
     $http.get(appconf.api+"/demo/task/recent")

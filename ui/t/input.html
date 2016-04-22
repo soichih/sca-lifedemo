@@ -4,8 +4,8 @@
     <h3>Add Input</h3>
     <div class="page">
         <div class="form-group">
-            <tabset>
-                <tab index="0" heading="Upload">
+            <uib-tabset>
+                <uib-tab index="0" heading="Upload">
                     <br>
                     <p>Please upload .tar.gz files you'd like to process</p>
                     <sca-wf-uploader instid="instance._id" taskid="appconf.upload_task_id" files="files"></sca-wf-uploader>
@@ -13,8 +13,8 @@
                         <button type="button" class="btn" ng-click="back()">Back</button>
                         <button type="button" class="btn btn-primary" ng-click="doneupload(files)" ng-if="files.length > 0">Next</button>
                     </div>
-                </tab>
-                <tab index="1" heading="From URL">
+                </uib-tab>
+                <uib-tab index="1" heading="From URL">
                     <br>
                     <form ng-submit="fromurl(url)">
                         <div class="form-group">
@@ -34,8 +34,8 @@
                             <button type="submit" class="btn btn-primary" ng-disabled="!url">Next</button>
                         </div>
                     </form>
-                </tab>
-                <tab index="2" heading="From SDA">
+                </uib-tab>
+                <uib-tab index="2" heading="From SDA">
                     <br>
                     <form ng-submit="fromsda(path)">
                         <div class="form-group">
@@ -51,8 +51,8 @@
                         <p>test/brain/life_demo_data_sda2.tar.gz</p>
                         <p>test/brain/life_demo_data_sda3.tar.gz</p>
                     </form>
-                </tab>
-            </tabset>
+                </uib-tab>
+            </uib-tabset>
             <br clear="both">
         </div>
     </div>

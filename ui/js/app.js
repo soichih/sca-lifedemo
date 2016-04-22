@@ -14,7 +14,7 @@ var app = angular.module('app', [
     'sca-wf',
     'sca-shared',
     'sca-product-raw',
-    'sca-product-lifebrain',
+    'sca-product-life',
 ]);
 
 //can't quite do the slidedown animation through pure angular/css.. borrowing slideDown from jQuery..
