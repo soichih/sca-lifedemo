@@ -57,39 +57,41 @@ app.config(['$routeProvider', 'appconf', function($routeProvider, appconf) {
     .when('/start/:instid', {
         template: '',
         controller: 'StartController',
-        requireslogin: true
+        requiresLogin: true
     })
     .when('/process/:instid', {
         templateUrl: 't/process.html',
         controller: 'ProcessController',
-        requireslogin: true
+        requiresLogin: true
     })
     .when('/input/:instid', {
         templateUrl: 't/input.html',
         controller: 'InputController',
-        requireslogin: true
+        //controllerAs: 'view',
+        requiresLogin: true,
+        //transclude: true,
     })
     .when('/tasks/:instid', {
         templateUrl: 't/tasks.html',
         controller: 'TasksController',
-        requireslogin: true
+        requiresLogin: true
     })
     .when('/import/:instid/:taskid', {
         templateUrl: 't/import.html',
         controller: 'ImportController',
-        requireslogin: true
+        requiresLogin: true
     })
     .when('/task/:instid/:taskid', {
         templateUrl: 't/task.html',
         controller: 'TaskController',
-        requireslogin: true
+        requiresLogin: true
     })
 
     /*
     .when('/task/:instid/:taskid', {
         templateUrl: 't/task.html',
         controller: 'TaskController',
-        requireslogin: true
+        requiresLogin: true
     })
     */
     /*
@@ -129,31 +131,6 @@ function($rootScope, $location, toaster, jwtHelper, appconf, $http, scaMessage) 
             }
         }
     });
-
-    //check to see if jwt is valid
-    var jwt = localStorage.getItem(appconf.jwt_id);
-    if(jwt) {
-        var expdate = jwtHelper.getTokenExpirationDate(jwt);
-        var ttl = expdate - Date.now();
-        if(ttl < 0) {
-            toaster.error("Your login session has expired. Please re-sign in");
-            localStorage.removeItem(appconf.jwt_id);
-        } else {
-            //TODO - do this via interval?
-            if(ttl < 3600*1000) {
-                //jwt expring in less than an hour! refresh!
-                console.log("jwt expiring in an hour.. refreshing first");
-                $http.post(appconf.auth_api+'/refresh')
-                    //skipAuthorization: true,  //prevent infinite recursion
-                    //headers: {'Authorization': 'Bearer '+jwt},
-                .then(function(response) {
-                    var jwt = response.data.jwt;
-                    localStorage.setItem(appconf.jwt_id, jwt);
-                    //menu.user = jwtHelper.decodeToken(jwt);
-                });
-            }
-        }
-    }
 }]);
 
 //configure httpProvider to send jwt unless skipAuthorization is set in config (not tested yet..)
@@ -166,15 +143,6 @@ function(appconf, $httpProvider, jwtInterceptorProvider) {
     }
     $httpProvider.interceptors.push('jwtInterceptor');
 }]);
-
-/*
-app.factory('serverconf', ['appconf', '$http', function(appconf, $http) {
-    return $http.get(appconf.api+'/config')
-    .then(function(res) {
-        return res.data;
-    });
-}]);
-*/
 
 //load menu and profile by promise chaining
 app.factory('menu', ['appconf', '$http', 'jwtHelper', '$sce', 'scaMessage', 'scaMenu', 'toaster',

@@ -49,13 +49,37 @@ function($scope, toaster, $http, jwtHelper, scaMessage, instance, $routeParams, 
     scaMessage.show(toaster);
     $scope.reset_urls($routeParams);
 
+    /*
     //default goes here
     $scope.config = {
         url: ''
     };
+    */
+    /*
+    $scope.sda_config = {
+        resource: null,
+        path: "",
+    }
+    */
 
     instance.load($routeParams.instid).then(function(_instance) {
         $scope.instance = _instance;
+    });
+
+    //load sda resources
+    $http.get($scope.appconf.sca_api+"/resource", {params: {
+        where: {type: 'hpss'},
+    }})
+    .then(function(res) {
+        $scope.hpss_resources = res.data;
+        if(res.data.length > 0) {
+            if(!$scope.instance.config) $scope.instance.config = {};
+            if(!$scope.instance.config.sda) $scope.instance.config.sda = {};
+            $scope.instance.config.sda.resource = res.data[0];
+        }
+    }, function(res) {
+        if(res.data && res.data.message) toaster.error(res.data.message);
+        else toaster.error(res.statusText);
     });
 
     function do_import(download_task) {
@@ -100,16 +124,16 @@ function($scope, toaster, $http, jwtHelper, scaMessage, instance, $routeParams, 
             else toaster.error(res.statusText);
         });
     }
-    $scope.fromsda = function(path) {
+    $scope.fromsda = function() {
+        var form = $scope.instance.config.sda;
         $http.post($scope.appconf.sca_api+"/task", {
             instance_id: $scope.instance._id,
             service_id: "sca-service-hpss",
             config: {
-                get: [{localdir:"download", hpsspath:path}],
+                get: [{localdir:"download", hpsspath:form.path}],
                 auth: {
-                    //TODO - let user pick this
-                    username: "hayashis",
-                    keytab: "5682f80ae8a834a636dee418.keytab",
+                    username: form.resource.config.username,
+                    keytab: form.resource._id+".keytab",
                 }
             },
         })

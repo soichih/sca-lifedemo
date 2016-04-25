@@ -12,7 +12,7 @@ angular.module('app.config', [])
     
     //authentcation service API to refresh token, etc.
     auth_api: '../api/auth',
-    auth_url: '../auth',
+    auth_url: '/auth',
 
     sca_api: '/api/sca',
     //upload_api: '/api/upload',
