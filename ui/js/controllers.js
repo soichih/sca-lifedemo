@@ -230,6 +230,7 @@ function($scope, menu,  scaMessage, toaster, jwtHelper, $http, $location, $route
     $scope.submit = function() {
         //will be set to the latest input
         //TODO - should I let user aggregate?
+        if(!$scope.instance.config) $scope.instance.config = {};
         $scope.instance.config.input_task_id = $scope.input_task._id;
 
         //list input files checked
