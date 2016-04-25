@@ -244,6 +244,7 @@ function($scope, menu,  scaMessage, toaster, jwtHelper, $http, $location, $route
             instance_id: $scope.instance._id,
             service_id: "sca-service-life",
             config: $scope.instance.config,
+            deps: [$scope.input_task._id],
         })
         .then(function(res) {
             //toaster.success(res.data.message);
