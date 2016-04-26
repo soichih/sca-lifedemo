@@ -1,10 +1,13 @@
 'use strict';
 
-app.controller('PageController', ['$scope', 'appconf', '$route', 'menu', 'jwtHelper',
-function($scope, appconf, $route, menu, jwtHelper) {
+app.controller('PageController', ['$scope', 'appconf', '$route', 'menu', 'jwtHelper', 'scaTask',
+function($scope, appconf, $route, menu, jwtHelper, scaTask) {
     $scope.appconf = appconf;
     $scope.title = appconf.title;
     $scope.menu = menu;
+
+    //scaTask.setconf(appconf);
+
     var jwt = localStorage.getItem(appconf.jwt_id);
     if(jwt) {
         $scope.user = jwtHelper.decodeToken(jwt);
@@ -275,8 +278,8 @@ function($scope, menu,  scaMessage, toaster, jwtHelper, $http, $location, $route
 }]);
 
 app.controller('ImportController', 
-['$scope', 'menu', 'scaMessage', 'toaster', 'jwtHelper', '$http', '$location', '$routeParams', '$timeout', 'instance',
-function($scope, menu, scaMessage, toaster, jwtHelper, $http, $location, $routeParams, $timeout, instance) {
+['$scope', 'menu', 'scaMessage', 'toaster', 'jwtHelper', '$http', '$location', '$routeParams', '$timeout', 'instance', 'scaTask',
+function($scope, menu, scaMessage, toaster, jwtHelper, $http, $location, $routeParams, $timeout, instance, scaTask) {
     scaMessage.show(toaster);
     $scope.reset_urls($routeParams);
 
@@ -286,10 +289,18 @@ function($scope, menu, scaMessage, toaster, jwtHelper, $http, $location, $routeP
 
     $scope.taskid = $routeParams.taskid;
 
+    $scope.task = scaTask.get($routeParams.taskid);
+    $scope.$watchCollection('task', function(task) {
+        if(task.status == "finished") $location.path("/process/"+$routeParams.instid);
+    });
+
+
+    /*
     //from sca-wf-taskdeps 
     $scope.$on('task_finished', function(event, task) {
         $location.path("/process/"+$routeParams.instid);
     });
+    */
 
     //$scope.path = $routeParams.instid+"/"+$scope.taskid; //path to open by default
 
@@ -327,8 +338,8 @@ function($scope, menu, scaMessage, toaster, jwtHelper, $http, $location, $routeP
 }]);
 
 app.controller('TaskController', 
-['$scope', 'menu', 'scaMessage', 'toaster', 'jwtHelper', '$http', '$location', '$routeParams', '$timeout',
-function($scope, menu, scaMessage, toaster, jwtHelper, $http, $location, $routeParams, $timeout) {
+['$scope', 'menu', 'scaMessage', 'toaster', 'jwtHelper', '$http', '$location', '$routeParams', '$timeout', 'scaTask',
+function($scope, menu, scaMessage, toaster, jwtHelper, $http, $location, $routeParams, $timeout, scaTask) {
     scaMessage.show(toaster);
     $scope.reset_urls($routeParams);
 
@@ -336,39 +347,30 @@ function($scope, menu, scaMessage, toaster, jwtHelper, $http, $location, $routeP
     $scope.jwt = localStorage.getItem($scope.appconf.jwt_id);
     $scope.activetab = 0; //raw
 
+    $scope.task = scaTask.get($routeParams.taskid);
+
+    $scope.resource = null; //resource where this task is running/ran
+    
+    $scope.$watchCollection('task', function(task) {
+       //also load resource info
+        if(task.resource_id && !$scope.resource) {
+            $scope.resource = {}; //prevent double loading if task gets updated while waiting
+            $http.get($scope.appconf.sca_api+"/resource", {params: {
+                where: {_id: task.resource_id}
+            }})
+            .then(function(res) {
+                $scope.resource = res.data[0];
+                //console.dir($scope.resource);
+            }, function(res) {
+                if(res.data && res.data.message) toaster.error(res.data.message);
+                else toaster.error(res.statusText);
+            });
+        }
+    });
+
     $scope.back = function() {
         $location.path("/process/"+$routeParams.instid);
     }
-    
-    //receive task update from sca-wf-task-deps directive
-    $scope.$on("task_finished", function(event, task) {
-        console.log("received task finished");
-        $scope.task = task;
-        $scope.active = 1; //switch to life graphs tab
-    });
-
-    /*
-    $http.get($scope.appconf.sca_api+"/task/"+$routeParams.taskid)
-    .then(function(res) {
-        $scope.task = res.data;
-        if($scope.task.products && $scope.task.products[0].type == "life/out") {
-            $scope.activetab = 1;
-        }
-    }, function(res) {
-        if(res.data && res.data.message) toaster.error(res.data.message);
-        else toaster.error(res.statusText);
-    });
-    */
-
-    /*
-    $http.get(appconf.api+"/demo/task/recent")
-    .then(function(res) {
-        $scope.tasks = res.data;
-    }, function(res) {
-        if(res.data && res.data.message) toaster.error(res.data.message);
-        else toaster.error(res.statusText);
-    });
-    */
 }]);
 
 //just a list of previously submitted tasks

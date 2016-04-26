@@ -11,7 +11,7 @@ angular.module('app.config', [])
     shared_url: '/shared',
     
     //authentcation service API to refresh token, etc.
-    auth_api: '../api/auth',
+    auth_api: '/api/auth',
     auth_url: '/auth',
 
     sca_api: '/api/sca',

@@ -49,6 +49,7 @@ app.directive('ngConfirmClick', [
 //show loading bar at the top
 app.config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
     cfpLoadingBarProvider.includeSpinner = false;
+    cfpLoadingBarProvider.latencyThreshold = 500;
 }]);
 
 //configure route
