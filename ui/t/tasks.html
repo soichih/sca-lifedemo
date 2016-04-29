@@ -6,7 +6,18 @@
         <p ng-if="tasks.length == 0" class="text-muted">No task has been submitted</p>
         <ul class="list-group">
             <li class="list-group-item slide-down clickable" ng-repeat="task in tasks | orderBy:'-update_date'" ng-click="open(task)">
-                <ng-include src="'t/oldtask.html'"></ng-include>
+                <sca-wf-tasksum task="task">
+                    <!--tranclude a bit more details-->
+                    <p>
+                        Input Files:
+                        <span ng-repeat="file in task.config.files" style="padding-right: 10px;"><i class="fa fa-file-o"></i> {{file.filename}}</span>
+                    </p>
+                    <p>
+                        Options:
+                        <span class="label label-default" ng-if="task.config.all">-all</span>
+                        <span class="label label-default" ng-if="task.config.hipposubfields">-hippo-subfields</span>
+                    </p>
+                </sca-wf-tasksum>
             </li>
         </ul>
     </div>

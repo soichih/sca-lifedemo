@@ -20,8 +20,8 @@
     </div>
 
     <div class="page">
+        <p class="alert alert-warning" ng-if="!best.resource">No resource is available to submit Life service. Please check your resource status.</p>
         <form ng-submit="submit()" class="form-horizontal">
-
             <div class="form-group">
                 <label class="col-sm-2 control-label">Input Life Brain</label>
                 <div class="col-sm-10">
@@ -96,6 +96,7 @@
             </div>
         </form>
     </div>
+    <!--
     <div ng-if="tasks.length > 0">
         <h3>Previously Submitted</h3>
         <div class="page">
@@ -106,6 +107,7 @@
             </ul>
         </div>
     </div>
+    -->
 </div>
 
 
