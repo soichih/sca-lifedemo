@@ -26,9 +26,10 @@ angular.module('app.config', [])
     sample_task: '56a04390cb0548a94d5471e2', 
 
     breads: [
-        {id: "process", label: "Life", url: "tdb" },
-        {id: "input", label: "Add Input", url: "tdb" },
-        {id: "tasks", label: "Tasks", url: "tdb" },
+        {id: "workflows", label: "Workflows", url:"/sca/#/workflows" },
+        {id: "process", label: "Life"},
+        {id: "input", label: "Add Input"},
+        {id: "tasks", label: "Tasks"},
     ],
 
     //URL samples 

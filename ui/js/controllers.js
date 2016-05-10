@@ -14,7 +14,7 @@ function($scope, appconf, $route, menu, jwtHelper, scaTask) {
     //this is crap..
     $scope.reset_urls = function($routeParams) {
         appconf.breads.forEach(function(item) {
-            item.url = "#/"+item.id+"/"+$routeParams.instid;
+           if(!item.url) item.url = "#/"+item.id+"/"+$routeParams.instid;
         });
     }
 }]);
