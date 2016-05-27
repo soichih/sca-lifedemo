@@ -52,7 +52,7 @@ function($scope, toaster, $http, jwtHelper, scaMessage, instance, $routeParams, 
     function do_import(download_task) {
         $http.post($scope.appconf.sca_api+"/task", {
             instance_id: $scope.instance._id,
-            service_id: "sca-product-life", //invoke product-nifti's importer
+            service: "soichih/sca-product-life", //invoke product-nifti's importer
             config: {
                 source_dir: download_task._id+"/download" //import source
             },
@@ -78,7 +78,7 @@ function($scope, toaster, $http, jwtHelper, scaMessage, instance, $routeParams, 
         //first submit download service
         $http.post($scope.appconf.sca_api+"/task", {
             instance_id: $scope.instance._id,
-            service_id: "sca-product-raw",
+            service: "soichih/sca-product-raw",
             config: {
                 download: [{dir:"download", url:url}],
             }
@@ -95,7 +95,7 @@ function($scope, toaster, $http, jwtHelper, scaMessage, instance, $routeParams, 
         var form = $scope.instance.config.sda;
         $http.post($scope.appconf.sca_api+"/task", {
             instance_id: $scope.instance._id,
-            service_id: "sca-service-hpss",
+            service: "soichih/sca-service-hpss",
             config: {
                 get: [{localdir:"download", hpsspath:form.path}],
                 auth: {
@@ -117,7 +117,7 @@ function($scope, toaster, $http, jwtHelper, scaMessage, instance, $routeParams, 
     $scope.doneupload = function() {
         $http.post($scope.appconf.sca_api+"/task", {
             instance_id: $scope.instance._id,
-            service_id: "sca-product-life", 
+            service: "soichih/sca-product-life", 
             config: {
                 source_dir: $scope.appconf.upload_task_id,
             }
@@ -170,7 +170,7 @@ function($scope, menu,  scaMessage, toaster, jwtHelper, $http, $location, $route
         //find one with nifti output
         where: {
             instance_id: $routeParams.instid,
-            service_id: "sca-service-life",
+            service: "soichih/sca-service-life",
         }
     }})
     .then(function(res) {
@@ -183,7 +183,7 @@ function($scope, menu,  scaMessage, toaster, jwtHelper, $http, $location, $route
 
     //make sure user has place to submit the main service (if not.. alert user!)
     $http.get($scope.appconf.sca_api+"/resource/best", {params: {
-        service_id: "sca-service-life",
+        service: "soichih/sca-service-life",
     }}).then(function(res) {
         $scope.best = res.data;
     }, function(res) {
@@ -212,7 +212,7 @@ function($scope, menu,  scaMessage, toaster, jwtHelper, $http, $location, $route
 
         $http.post($scope.appconf.sca_api+"/task", {
             instance_id: $scope.instance._id,
-            service_id: "sca-service-life",
+            service: "soichih/sca-service-life",
             config: $scope.instance.config,
             deps: [$scope.input_task._id],
         })
@@ -313,7 +313,7 @@ function($scope, menu,  scaMessage, toaster, jwtHelper, $http, $location, $route
     $http.get($scope.appconf.sca_api+"/task", {params: {
         where: {
             instance_id: $routeParams.instid,
-            service_id: "sca-service-life",
+            service: "soichih/sca-service-life",
         }
     }})
     .then(function(res) {
