@@ -31,23 +31,24 @@ function($scope, toaster, $http, jwtHelper, scaMessage, instance, $routeParams, 
 
     instance.load($routeParams.instid).then(function(_instance) {
         $scope.instance = _instance;
+        
+        //load sda resources
+        $http.get($scope.appconf.sca_api+"/resource", {params: {
+            where: {type: 'hpss'},
+        }})
+        .then(function(res) {
+            $scope.hpss_resources = res.data;
+            if(res.data.length > 0) {
+                if(!$scope.instance.config) $scope.instance.config = {};
+                if(!$scope.instance.config.sda) $scope.instance.config.sda = {};
+                $scope.instance.config.sda.resource = res.data[0];
+            }
+        }, function(res) {
+            if(res.data && res.data.message) toaster.error(res.data.message);
+            else toaster.error(res.statusText);
+        });
     });
 
-    //load sda resources
-    $http.get($scope.appconf.sca_api+"/resource", {params: {
-        where: {type: 'hpss'},
-    }})
-    .then(function(res) {
-        $scope.hpss_resources = res.data;
-        if(res.data.length > 0) {
-            if(!$scope.instance.config) $scope.instance.config = {};
-            if(!$scope.instance.config.sda) $scope.instance.config.sda = {};
-            $scope.instance.config.sda.resource = res.data[0];
-        }
-    }, function(res) {
-        if(res.data && res.data.message) toaster.error(res.data.message);
-        else toaster.error(res.statusText);
-    });
 
     function do_import(download_task) {
         $http.post($scope.appconf.sca_api+"/task", {
@@ -266,8 +267,8 @@ function($scope, menu, scaMessage, toaster, jwtHelper, $http, $location, $routeP
 }]);
 
 app.controller('TaskController', 
-['$scope', 'menu', 'scaMessage', 'toaster', 'jwtHelper', '$http', '$location', '$routeParams', '$timeout', 'scaTask',
-function($scope, menu, scaMessage, toaster, jwtHelper, $http, $location, $routeParams, $timeout, scaTask) {
+['$scope', 'menu', 'scaMessage', 'toaster', 'jwtHelper', '$http', '$location', '$routeParams', '$timeout', 'scaTask', 'scaResource',
+function($scope, menu, scaMessage, toaster, jwtHelper, $http, $location, $routeParams, $timeout, scaTask, scaResource) {
     scaMessage.show(toaster);
     $scope.reset_urls($routeParams);
 
@@ -283,6 +284,7 @@ function($scope, menu, scaMessage, toaster, jwtHelper, $http, $location, $routeP
        //also load resource info
         if(task.resource_id && !$scope.resource) {
             $scope.resource = {}; //prevent double loading if task gets updated while waiting
+            /*
             $http.get($scope.appconf.sca_api+"/resource", {params: {
                 where: {_id: task.resource_id}
             }})
@@ -293,6 +295,8 @@ function($scope, menu, scaMessage, toaster, jwtHelper, $http, $location, $routeP
                 if(res.data && res.data.message) toaster.error(res.data.message);
                 else toaster.error(res.statusText);
             });
+            */
+            $scope.resource = scaResource.get(task.resource_id);
         }
     });
 
