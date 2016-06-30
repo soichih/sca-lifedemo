@@ -14,7 +14,7 @@ angular.module('app.config', [])
     auth_api: '/api/auth',
     auth_url: '/auth',
 
-    sca_api: '/api/sca',
+    sca_api: '/api/wf',
     //upload_api: '/api/upload',
     
     progress_api: '/api/progress',
@@ -26,7 +26,7 @@ angular.module('app.config', [])
     sample_task: '56a04390cb0548a94d5471e2', 
 
     breads: [
-        {id: "workflows", label: "Workflows", url:"/sca/#/workflows" },
+        {id: "workflows", label: "Workflows", url:"/wf/#/workflows" },
         {id: "process", label: "Life"},
         {id: "input", label: "Add Input"},
         {id: "tasks", label: "Tasks"},
