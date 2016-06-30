@@ -11,7 +11,7 @@ var app = angular.module('app', [
     'ui.bootstrap',
     'ui.select',
     'ui.bootstrap.tooltip',
-    'sca-wf',
+    'sca-ng-wf',
     'sca-shared',
     'sca-product-raw',
     'sca-product-life',
