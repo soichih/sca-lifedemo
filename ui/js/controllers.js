@@ -19,9 +19,38 @@ function($scope, appconf, $route, menu, jwtHelper, scaTask) {
     }
 }]);
 
-app.controller('StartController', ['$scope', 'toaster', '$http', 'jwtHelper', 'scaMessage', 'instance', '$routeParams', '$location',
-function($scope, toaster, $http, jwtHelper, scaMessage, instance, $routeParams, $location) {
-    $location.path("/process/"+$routeParams.instid).replace();
+app.controller('StartController', ['$scope', 'toaster', '$http', 'jwtHelper', 'scaMessage', 'instance', '$routeParams', '$location', 'appconf',
+function($scope, toaster, $http, jwtHelper, scaMessage, instance, $routeParams, $location, appconf) {
+    if($routeParams.instid) return $location.path("/process/"+$routeParams.instid).replace();
+
+    //pick sca-wf-life instance
+    $http.get(appconf.sca_api+'/instance', {
+        params: {
+            find: { workflow_id: "sca-wf-life" } 
+        }
+    }).then(function(res) {
+        if(res.data.instances.length > 0) {
+            var instance = res.data.instances[0]; //grab first one
+            $location.path("/process/"+instance._id).replace();
+        } else {
+            //create a new one..
+            return $http.post(appconf.sca_api+"/instance", {
+                workflow_id: "sca-wf-life",
+                name: "life",
+                desc: "life default instance",
+                config: {},
+            }).then(function(res) {
+                console.log("created new instance");
+                $location.path("/process/"+res.data._id).replace();
+            }, function(res) {
+                if(res.data && res.data.message) toaster.error(res.data.message);
+                else toaster.error(res.statusText);
+            });
+        }
+    }, function(res) {
+        if(res.data && res.data.message) toaster.error(res.data.message);
+        else toaster.error(res.statusText);
+    });
 }]);
 
 app.controller('InputController', ['$scope', 'toaster', '$http', 'jwtHelper', 'scaMessage', 'instance', '$routeParams', '$location',

@@ -111,10 +111,13 @@ app.config(['$routeProvider', 'appconf', function($routeProvider, appconf) {
         controller: 'TaskController',
         requiresLogin: true
     })
-    .otherwise({
-        redirectTo: '/submit'
-    });
     */
+    .otherwise({
+        //redirectTo: '/submit'
+        template: '',
+        controller: 'StartController',
+        requiresLogin: true
+    });
     ;
     
     //console.dir($routeProvider);
