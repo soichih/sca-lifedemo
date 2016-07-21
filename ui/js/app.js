@@ -55,72 +55,43 @@ app.config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
 //configure route
 app.config(['$routeProvider', 'appconf', function($routeProvider, appconf) {
     $routeProvider
-    .when('/start/:instid', {
+    /*
+    .when('/start', {
         template: '',
         controller: 'StartController',
         requiresLogin: true
     })
-    .when('/process/:instid', {
+    */
+    .when('/process', {
         templateUrl: 't/process.html',
         controller: 'ProcessController',
         requiresLogin: true
     })
-    .when('/input/:instid', {
+    .when('/input', {
         templateUrl: 't/input.html',
         controller: 'InputController',
         //controllerAs: 'view',
         requiresLogin: true,
         //transclude: true,
     })
-    .when('/tasks/:instid', {
-        templateUrl: 't/tasks.html',
-        controller: 'TasksController',
-        requiresLogin: true
-    })
-    .when('/import/:instid/:taskid', {
-        templateUrl: 't/import.html',
-        controller: 'ImportController',
-        requiresLogin: true
-    })
-    .when('/task/:instid/:taskid', {
-        templateUrl: 't/task.html',
-        controller: 'TaskController',
-        requiresLogin: true
-    })
-
-    /*
-    .when('/task/:instid/:taskid', {
-        templateUrl: 't/task.html',
-        controller: 'TaskController',
-        requiresLogin: true
-    })
-    */
-    /*
-    when('/submit', {
-        templateUrl: 't/submit.html',
-        controller: 'SubmitController',
-        requiresLogin: true
-    })
     .when('/tasks', {
         templateUrl: 't/tasks.html',
         controller: 'TasksController',
         requiresLogin: true
     })
-    .when('/task/:id', {
+    .when('/import/:taskid', {
+        templateUrl: 't/import.html',
+        controller: 'ImportController',
+        requiresLogin: true
+    })
+    .when('/task/:taskid', {
         templateUrl: 't/task.html',
         controller: 'TaskController',
         requiresLogin: true
     })
-    */
     .otherwise({
-        //redirectTo: '/submit'
-        template: '',
-        controller: 'StartController',
-        requiresLogin: true
+        redirectTo: '/process'
     });
-    ;
-    
-    //console.dir($routeProvider);
 }]).run(['$rootScope', '$location', 'toaster', 'jwtHelper', 'appconf', '$http', 'scaMessage',
 function($rootScope, $location, toaster, jwtHelper, appconf, $http, scaMessage) {
     $rootScope.$on("$routeChangeStart", function(event, next, current) {
@@ -208,7 +179,7 @@ function(appconf, $http, jwtHelper, toaster) {
     var _instance = null; //call load()
     return {
         load: function(instid) {
-            return $http.get(appconf.sca_api+'/instance/'+instid)
+            return $http.get(appconf.wf_api+'/instance/'+instid)
             .then(function(res) {
                 //console.log("loaded instance");
                 //console.dir(res.data);
@@ -221,7 +192,7 @@ function(appconf, $http, jwtHelper, toaster) {
         },
         save: function(instance) {
             //console.dir(instance);
-            return $http.put(appconf.sca_api+'/instance/'+instance._id, instance);
+            return $http.put(appconf.wf_api+'/instance/'+instance._id, instance);
         },
         get: function() {
             return _instance;
@@ -229,6 +200,45 @@ function(appconf, $http, jwtHelper, toaster) {
     }
 }]);
 
+
+//return stardock singleton instance.
+//create newone if it doesn't exist yet
+app.factory('instance', ['appconf', '$http', 'jwtHelper', 'toaster',
+function(appconf, $http, jwtHelper, toaster) {
+    console.log("getting life wf instance");
+    return $http.get(appconf.wf_api+'/instance', {
+        params: {
+            find: {
+                workflow_id: "life"
+            } 
+        }
+    })
+    .then(function(res) {
+        console.log("stardock query result");
+        console.log(res.data);
+        if(res.data.count != 0) {
+            return res.data.instances[0];
+        } else {
+            console.log("creating new instance");
+            //need to create one
+            return $http.post(appconf.wf_api+"/instance", {
+                workflow_id: "life",
+                name: "life demo",
+                desc: "singleton",
+                config: {some: "thing"},
+            }).then(function(res) {
+                console.log("created new instance");
+                return res.data;
+            }, function(res) {
+                if(res.data && res.data.message) toaster.error(res.data.message);
+                else toaster.error(res.statusText);
+            });
+        }
+    }, function(res) {
+        if(res.data && res.data.message) toaster.error(res.data.message);
+        else toaster.error(res.statusText);
+    });
+}]);
 
 //http://plnkr.co/edit/juqoNOt1z1Gb349XabQ2?p=preview
 /**

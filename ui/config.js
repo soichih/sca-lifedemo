@@ -2,8 +2,6 @@
 
 angular.module('app.config', [])
 .constant('appconf', {
-
-    //title: 'Life Demo (soichi7)',
     api: '/api/sca-wf-life',
 
     //shared servive api and ui urls (for menus and stuff)
@@ -14,8 +12,8 @@ angular.module('app.config', [])
     auth_api: '/api/auth',
     auth_url: '/auth',
 
-    sca_api: '/api/wf',
-    //upload_api: '/api/upload',
+    sca_api: '/api/wf', //deprecated by still used by some sca-wf bower components
+    wf_api: '/api/wf',
     
     progress_api: '/api/progress',
     progress_url: '/progress',
@@ -27,9 +25,9 @@ angular.module('app.config', [])
 
     breads: [
         {id: "workflows", label: "Workflows", url:"/wf/#/workflows" },
-        {id: "process", label: "Life"},
-        {id: "input", label: "Add Input"},
-        {id: "tasks", label: "Tasks"},
+        {id: "process", label: "Life", url: "#/process"},
+        {id: "input", label: "Add Input", url: "#/input"},
+        {id: "tasks", label: "Tasks", url: "#/tasks"},
     ],
 
     //URL samples 
@@ -44,24 +42,5 @@ angular.module('app.config', [])
             url: "https://stacks.stanford.edu/file/druid:cs392kv3054/life_demo_data.tar.gz"
         },
     ],
-
-    /*
-    menu: [
-        {
-            id: "submit",
-            label: "Submit",
-            url: "#/submit",
-        },
-        {
-            id: "tasks",
-            label: "Jobs",
-            url: "#/tasks",
-            show: function(scope) {
-                if(~scope.sca.indexOf('user')) return true;
-                return false;
-            }
-        },
-    ]
-    */
 });
 
