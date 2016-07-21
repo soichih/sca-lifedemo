@@ -194,26 +194,9 @@ function($scope, menu,  scaMessage, toaster, jwtHelper, $http, $location, $route
         else toaster.error(res.statusText);
     });
 
-    /*
-    //load previously submitted tasks
-    $http.get($scope.appconf.sca_api+"/task", {params: {
-        //find one with nifti output
-        where: {
-            instance_id: $routeParams.instid,
-            service: "soichih/sca-service-life",
-        }
-    }})
-    .then(function(res) {
-        $scope.tasks = res.data;
-    }, function(res) {
-        if(res.data && res.data.message) toaster.error(res.data.message);
-        else toaster.error(res.statusText);
-    });
-    */
-
     //make sure user has place to submit the main service (if not.. alert user!)
     $http.get($scope.appconf.sca_api+"/resource/best", {params: {
-        service: "soichih/sca-service-life",
+        service: "soichih/life-1",
     }}).then(function(res) {
         $scope.best = res.data;
     }, function(res) {
@@ -242,7 +225,7 @@ function($scope, menu,  scaMessage, toaster, jwtHelper, $http, $location, $route
 
         $http.post($scope.appconf.sca_api+"/task", {
             instance_id: $scope.instance._id,
-            service: "soichih/sca-service-life",
+            service: "soichih/life-1",
             config: $scope.instance.config,
             deps: [$scope.input_task._id],
         })
@@ -346,7 +329,7 @@ function($scope, menu,  scaMessage, toaster, jwtHelper, $http, $location, $route
     $http.get($scope.appconf.sca_api+"/task", {params: {
         where: {
             instance_id: $routeParams.instid,
-            service: "soichih/sca-service-life",
+            service: "soichih/life-1",
         }
     }})
     .then(function(res) {
